@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.escoz.dndapi.Model.Feature;
 import net.escoz.dndapi.Model.Language;
 
 import java.util.Set;
@@ -42,16 +43,16 @@ public class Monster {
     private Integer charisma;
 
     /* Relaciones muchos a uno */
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "size_id", nullable = false)
     private Size size;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "type_id", nullable = false)
     private Type type;
 
     /* Relaciones muchos a muchos */
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "monsters_mn_skills",
             joinColumns = @JoinColumn(name = "monster_id"),
@@ -59,7 +60,7 @@ public class Monster {
     )
     private Set<Skill> skills;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "monsters_mn_languages",
             joinColumns = @JoinColumn(name = "monster_id"),
@@ -67,7 +68,7 @@ public class Monster {
     )
     private Set<Language> languages;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "monsters_mn_senses",
             joinColumns = @JoinColumn(name = "monster_id"),
@@ -75,4 +76,20 @@ public class Monster {
     )
     private Set<Sense> senses;
 
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "monsters_mn_actions",
+            joinColumns = @JoinColumn(name = "monster_id"),
+            inverseJoinColumns = @JoinColumn(name = "action_id")
+    )
+    private Set<Action> actions;
+
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "monsters_mn_features",
+            joinColumns = @JoinColumn(name = "monster_id"),
+            inverseJoinColumns = @JoinColumn(name = "features_id")
+    )
+    private Set<Feature> features;
 }
