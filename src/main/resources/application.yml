@@ -1,0 +1,10 @@
+spring:
+  profiles.active: dev
+
+  # Configuración de la bb dd
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name:
+
