@@ -44,11 +44,11 @@ public class Monster {
     private Integer charisma;
 
     /* Relaciones muchos a uno */
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "size_id", nullable = false)
     private Size size;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "type_id", nullable = false)
     private Type type;
 

@@ -53,15 +53,6 @@ public class MonstersService implements IMonstersService {
         /* Mapeamos la entrada a una entidad de la bb dd */
         Monster monster = modelMapper.map(monsterDTO, Monster.class);
 
-        /* Guardamos el tamaño y tipo en caso de no existir */
-        if (!sizeRepository.existsById(monster.getSize().getName())) {
-            sizeRepository.save(monster.getSize());
-        }
-
-        if (!typesRepository.existsById(monster.getType().getName())) {
-            typesRepository.save(monster.getType());
-        }
-
         monsterDTO.getSkills()
                 .forEach(skill -> monster.addSkill(new Skill(skill, null)));
 
