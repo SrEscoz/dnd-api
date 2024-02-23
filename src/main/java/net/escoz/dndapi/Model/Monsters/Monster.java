@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import net.escoz.dndapi.Model.Feature;
 import net.escoz.dndapi.Model.Language;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -43,16 +44,16 @@ public class Monster {
     private Integer charisma;
 
     /* Relaciones muchos a uno */
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "size_id", nullable = false)
     private Size size;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "type_id", nullable = false)
     private Type type;
 
     /* Relaciones muchos a muchos */
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "monsters_mn_skills",
             joinColumns = @JoinColumn(name = "monster_id"),
@@ -60,7 +61,7 @@ public class Monster {
     )
     private Set<Skill> skills;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "monsters_mn_languages",
             joinColumns = @JoinColumn(name = "monster_id"),
@@ -68,7 +69,7 @@ public class Monster {
     )
     private Set<Language> languages;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "monsters_mn_senses",
             joinColumns = @JoinColumn(name = "monster_id"),
@@ -76,7 +77,7 @@ public class Monster {
     )
     private Set<Sense> senses;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "monsters_mn_actions",
             joinColumns = @JoinColumn(name = "monster_id"),
@@ -85,11 +86,38 @@ public class Monster {
     private Set<Action> actions;
 
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "monsters_mn_features",
             joinColumns = @JoinColumn(name = "monster_id"),
             inverseJoinColumns = @JoinColumn(name = "features_id")
     )
     private Set<Feature> features;
+
+    /* ===============================================
+        Métodos para añadir elementos a las listas
+    =============================================== */
+    public void addSkill(Skill skill) {
+        if (skills == null)
+            skills = new HashSet<>();
+        skills.add(skill);
+    }
+
+    public void addLanguage(Language language) {
+        if (languages == null)
+            languages = new HashSet<>();
+        languages.add(language);
+    }
+
+    public void addSense(Sense sense) {
+        if (senses == null)
+            senses = new HashSet<>();
+        senses.add(sense);
+    }
+
+    public void removeNulls() {
+        skills.remove(new Skill());
+        languages.remove(new Language());
+        senses.remove(new Sense());
+    }
 }

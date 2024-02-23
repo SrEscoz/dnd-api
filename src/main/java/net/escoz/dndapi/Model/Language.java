@@ -1,12 +1,10 @@
 package net.escoz.dndapi.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import net.escoz.dndapi.Model.Monsters.Monster;
 
 import java.util.Set;
@@ -21,6 +19,7 @@ public class Language {
     @Id
     private String name;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "languages")
     private Set<Monster> monsters;
 }

@@ -1,12 +1,10 @@
 package net.escoz.dndapi.Model.Monsters;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Set;
 
@@ -20,6 +18,7 @@ public class Skill {
     @Id
     private String name;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "skills")
     private Set<Monster> monsters;
 }

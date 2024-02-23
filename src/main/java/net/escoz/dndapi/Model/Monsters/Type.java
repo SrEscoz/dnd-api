@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Set;
 
@@ -20,6 +21,7 @@ public class Type {
     @Column(length = 3000)
     private String description;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "type")
     private Set<Monster> monsters;
 }
