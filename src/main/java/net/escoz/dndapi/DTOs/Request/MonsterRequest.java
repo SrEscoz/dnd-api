@@ -2,8 +2,6 @@ package net.escoz.dndapi.DTOs.Request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import net.escoz.dndapi.DTOs.MonsterSizeDTO;
-import net.escoz.dndapi.DTOs.MonsterTypeDTO;
 import net.escoz.dndapi.Model.Feature;
 import net.escoz.dndapi.Model.Monsters.Action;
 

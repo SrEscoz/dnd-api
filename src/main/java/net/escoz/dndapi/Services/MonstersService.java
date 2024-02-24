@@ -5,7 +5,6 @@ import net.escoz.dndapi.DTOs.MonsterTypeDTO;
 import net.escoz.dndapi.DTOs.Reponses.BasicResponse;
 import net.escoz.dndapi.DTOs.Reponses.MonsterDTO;
 import net.escoz.dndapi.DTOs.Request.MonsterRequest;
-import net.escoz.dndapi.DTOs.Request.SensesRequest;
 import net.escoz.dndapi.Exceptions.BadRequestException;
 import net.escoz.dndapi.Model.Language;
 import net.escoz.dndapi.Model.Monsters.*;
@@ -19,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -149,32 +147,4 @@ public class MonstersService implements IMonstersService {
         return new BasicResponse(HttpStatus.CREATED, "Tamaño de monstruo creado");
     }
 
-    @Override
-    public BasicResponse createMonsterSenses(SensesRequest sensesRequest) {
-        List<String> sensesDTO = sensesRequest.getSenses();
-
-        /* Comprobación de validez de la entrada */
-        if (CollectionUtils.isEmpty(sensesDTO)) {
-            LOGGER.error("[MonstersService] createMonsterSenses -> Lista vacía");
-            throw new BadRequestException("Lista de sentidos vacía");
-        }
-
-        for (String senseDTO : sensesDTO) {
-            if (sensesRepository.existsByName(senseDTO)) {
-                LOGGER.error("[MonstersService] createMonsterSenses Tipo duplicado -> {}", senseDTO);
-                throw new BadRequestException("El sentido '" + senseDTO + "' ya existe");
-            }
-        }
-
-        /* Mapeamos la entrada a una entidad de la bb dd */
-        List<Sense> senses = sensesDTO
-                .stream()
-                .map(Sense::new)
-                .toList();
-
-        sensesRepository.saveAll(senses);
-        LOGGER.info("[MonstersService] createMonsterSenses Sentidos creados creado -> {}", sensesDTO);
-
-        return new BasicResponse(HttpStatus.CREATED, "Sentido(s) creado(s)");
-    }
 }

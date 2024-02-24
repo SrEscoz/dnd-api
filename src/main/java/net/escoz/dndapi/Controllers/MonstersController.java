@@ -1,11 +1,10 @@
 package net.escoz.dndapi.Controllers;
 
 import net.escoz.dndapi.DTOs.MonsterSizeDTO;
-import net.escoz.dndapi.DTOs.Request.MonsterRequest;
 import net.escoz.dndapi.DTOs.MonsterTypeDTO;
 import net.escoz.dndapi.DTOs.Reponses.BasicResponse;
 import net.escoz.dndapi.DTOs.Reponses.MonsterDTO;
-import net.escoz.dndapi.DTOs.Request.SensesRequest;
+import net.escoz.dndapi.DTOs.Request.MonsterRequest;
 import net.escoz.dndapi.Services.MonstersService;
 import net.escoz.dndapi.Utils.Utils;
 import org.slf4j.Logger;
@@ -58,12 +57,5 @@ public class MonstersController {
     public BasicResponse postSize(@RequestBody MonsterSizeDTO request) {
         LOGGER.info("[MonstersController] postSize -> {}", Utils.objectToJson(request));
         return monstersService.createMonsterSize(request);
-    }
-
-    @PostMapping("/senses")
-    @ResponseStatus(HttpStatus.CREATED)
-    public BasicResponse postSenses(@RequestBody SensesRequest request) {
-        LOGGER.info("[MonstersController] postSenses -> {}", Utils.objectToJson(request));
-        return monstersService.createMonsterSenses(request);
     }
 }

@@ -1,9 +1,11 @@
 package net.escoz.dndapi.Model.Monsters;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.*;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
