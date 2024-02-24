@@ -1,5 +1,6 @@
 package net.escoz.dndapi.Controllers;
 
+import net.escoz.dndapi.DTOs.MonsterSizeDTO;
 import net.escoz.dndapi.DTOs.Request.MonsterRequest;
 import net.escoz.dndapi.DTOs.MonsterTypeDTO;
 import net.escoz.dndapi.DTOs.Reponses.BasicResponse;
@@ -50,6 +51,13 @@ public class MonstersController {
     public BasicResponse postType(@RequestBody MonsterTypeDTO request) {
         LOGGER.info("[MonstersController] postTypes -> {}", Utils.objectToJson(request));
         return monstersService.createMonsterType(request);
+    }
+
+    @PostMapping("/sizes")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BasicResponse postSize(@RequestBody MonsterSizeDTO request) {
+        LOGGER.info("[MonstersController] postSize -> {}", Utils.objectToJson(request));
+        return monstersService.createMonsterSize(request);
     }
 
     @PostMapping("/senses")

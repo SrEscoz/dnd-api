@@ -1,10 +1,7 @@
 package net.escoz.dndapi.Model.Monsters;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Set;
 
@@ -12,10 +9,12 @@ import java.util.Set;
 @Table(name = "monster_types")
 @Data
 @AllArgsConstructor
+@RequiredArgsConstructor
 @NoArgsConstructor
 public class Type {
 
     @Id
+    @NonNull
     private String name;
 
     @Column(length = 3000)

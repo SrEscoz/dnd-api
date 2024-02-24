@@ -38,8 +38,8 @@ public class MonsterRequest {
     private Integer charisma;
 
     /* Relaciones muchos a uno */
-    private MonsterSizeDTO size;
-    private MonsterTypeDTO type;
+    private String size;
+    private String type;
 
     /* Relaciones muchos a muchos */
     private List<String> skills;

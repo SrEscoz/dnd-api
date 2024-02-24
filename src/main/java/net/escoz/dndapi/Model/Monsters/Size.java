@@ -1,10 +1,7 @@
 package net.escoz.dndapi.Model.Monsters;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,15 +10,17 @@ import java.util.Set;
 @Table(name = "monster_sizes")
 @Data
 @AllArgsConstructor
+@RequiredArgsConstructor
 @NoArgsConstructor
 public class Size {
 
     @Id
+    @NonNull
     private String name;
 
     private String space;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "size", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "size")
     private Set<Monster> monsters;
 }

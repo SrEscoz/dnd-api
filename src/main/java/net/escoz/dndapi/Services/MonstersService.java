@@ -1,5 +1,6 @@
 package net.escoz.dndapi.Services;
 
+import net.escoz.dndapi.DTOs.MonsterSizeDTO;
 import net.escoz.dndapi.DTOs.MonsterTypeDTO;
 import net.escoz.dndapi.DTOs.Reponses.BasicResponse;
 import net.escoz.dndapi.DTOs.Reponses.MonsterDTO;
@@ -7,10 +8,7 @@ import net.escoz.dndapi.DTOs.Request.MonsterRequest;
 import net.escoz.dndapi.DTOs.Request.SensesRequest;
 import net.escoz.dndapi.Exceptions.BadRequestException;
 import net.escoz.dndapi.Model.Language;
-import net.escoz.dndapi.Model.Monsters.Monster;
-import net.escoz.dndapi.Model.Monsters.Sense;
-import net.escoz.dndapi.Model.Monsters.Skill;
-import net.escoz.dndapi.Model.Monsters.Type;
+import net.escoz.dndapi.Model.Monsters.*;
 import net.escoz.dndapi.Repositories.MonsterRepository;
 import net.escoz.dndapi.Repositories.MonsterSensesRepository;
 import net.escoz.dndapi.Repositories.MonsterSizeRepository;
@@ -23,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -79,9 +76,29 @@ public class MonstersService implements IMonstersService {
 
     @Override
     public BasicResponse createMonster(MonsterRequest monsterRequest) {
+
+        /* Comprobamos que sea válido */
+        if (monsterRepository.existsById(monsterRequest.getName())) {
+            LOGGER.error("[MonstersService] createMonster Monstruo duplicado -> {}", monsterRequest.getName());
+            throw new BadRequestException("El monstruo ya existe");
+        }
+
+        if (!sizeRepository.existsById(monsterRequest.getSize())) {
+            LOGGER.error("[MonstersService] createMonster No existe el tamaño -> {}", monsterRequest.getSize());
+            throw new BadRequestException("No existe el tamaño");
+        }
+
+        if (!typesRepository.existsById(monsterRequest.getType())) {
+            LOGGER.error("[MonstersService] createMonster No existe el tipo -> {}", monsterRequest.getType());
+            throw new BadRequestException("No existe el tipo");
+        }
+
         /* Mapeamos la entrada a una entidad de la bb dd */
         Monster monster = modelMapper.map(monsterRequest, Monster.class);
-        monster.cleanLists();
+        monster.initLists();
+
+        monster.setSize(new Size(monsterRequest.getSize()));
+        monster.setType(new Type(monsterRequest.getType()));
 
         monsterRequest.getSkills()
                 .forEach(s -> monster.getSkills().add(new Skill(s)));
@@ -113,6 +130,23 @@ public class MonstersService implements IMonstersService {
         LOGGER.info("[MonstersService] createMonsterType Tipo creado -> {}", type.getName());
 
         return new BasicResponse(HttpStatus.CREATED, "Tipo de monstruo creado");
+    }
+
+    @Override
+    public BasicResponse createMonsterSize(MonsterSizeDTO monsterSizeDTO) {
+        /* Mapeamos la entrada a una entidad de la bb dd */
+        Size size = modelMapper.map(monsterSizeDTO, Size.class);
+
+        /* Comprobamos que sea válido */
+        if (sizeRepository.existsById(size.getName())) {
+            LOGGER.error("[MonstersService] createMonsterSize Tamaño duplicado -> {}", size.getName());
+            throw new BadRequestException("El tamaño ya existe");
+        }
+
+        sizeRepository.save(size);
+        LOGGER.info("[MonstersService] createMonsterSize Tamaño creado -> {}", size.getName());
+
+        return new BasicResponse(HttpStatus.CREATED, "Tamaño de monstruo creado");
     }
 
     @Override

@@ -119,12 +119,12 @@ public class Monster {
     /**
      * Ñapa para evitar los nulos del ModelMapper
      */
-    public void cleanLists() {
-        if (skills != null) skills.clear();
-        if (languages != null) languages.clear();
-        if (senses != null) senses.clear();
-        if (actions != null) actions.clear();
-        if (features != null) features.clear();
+    public void initLists() {
+        skills = new HashSet<>();
+        languages = new HashSet<>();
+        senses = new HashSet<>();
+        actions = new HashSet<>();
+        features = new HashSet<>();
     }
 
 }
