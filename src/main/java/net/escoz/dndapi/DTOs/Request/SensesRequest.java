@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class PostSensesRequest {
+public class SensesRequest {
 
     private List<String> senses;
 }

@@ -1,9 +1,10 @@
 package net.escoz.dndapi.Services;
 
-import net.escoz.dndapi.DTOs.MonsterDTO;
 import net.escoz.dndapi.DTOs.MonsterTypeDTO;
 import net.escoz.dndapi.DTOs.Reponses.BasicResponse;
-import net.escoz.dndapi.DTOs.Request.PostSensesRequest;
+import net.escoz.dndapi.DTOs.Reponses.MonsterDTO;
+import net.escoz.dndapi.DTOs.Request.MonsterRequest;
+import net.escoz.dndapi.DTOs.Request.SensesRequest;
 import net.escoz.dndapi.Exceptions.BadRequestException;
 import net.escoz.dndapi.Model.Language;
 import net.escoz.dndapi.Model.Monsters.Monster;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -45,23 +47,50 @@ public class MonstersService implements IMonstersService {
     private ModelMapper modelMapper;
 
     /* ==============================
+            Métodos de obtención
+     ============================== */
+
+    @Override
+    public List<MonsterDTO> getMonsters() {
+        List<Monster> monsters = monsterRepository.findAll();
+        List<MonsterDTO> response = monsters
+                .stream()
+                .map(monster -> {
+                    System.out.println(monster);
+
+                    MonsterDTO monsterDTO = modelMapper.map(monster, MonsterDTO.class);
+                    monsterDTO.setSize(monster.getSize().getName());
+                    monsterDTO.setType(monster.getType().getName());
+                    monsterDTO.setSkills(monster.getSkills().stream().map(Skill::getName).toList());
+                    monsterDTO.setLanguages(monster.getLanguages().stream().map(Language::getName).toList());
+                    monsterDTO.setSenses(monster.getSenses().stream().map(Sense::getName).toList());
+
+                    return monsterDTO;
+                })
+                .toList();
+
+        LOGGER.info("[MonstersService] getMonsters Obtenidos monstruos -> {}", monsters.size());
+        return response;
+    }
+
+    /* ==============================
             Métodos de creación
      ============================== */
 
     @Override
-    public BasicResponse createMonster(MonsterDTO monsterDTO) {
+    public BasicResponse createMonster(MonsterRequest monsterRequest) {
         /* Mapeamos la entrada a una entidad de la bb dd */
-        Monster monster = modelMapper.map(monsterDTO, Monster.class);
+        Monster monster = modelMapper.map(monsterRequest, Monster.class);
+        monster.cleanLists();
 
-        monsterDTO.getSkills()
-                .forEach(skill -> monster.addSkill(new Skill(skill, null)));
+        monsterRequest.getSkills()
+                .forEach(s -> monster.getSkills().add(new Skill(s)));
 
-        monsterDTO.getLanguages()
-                .forEach(language -> monster.addLanguage(new Language(language, null)));
+        monsterRequest.getLanguages()
+                .forEach(l -> monster.getLanguages().add(new Language(l)));
 
-        monsterDTO.getSenses()
-                .forEach(sense -> monster.addSense(new Sense(sense, null)));
-        monster.removeNulls();
+        monsterRequest.getSenses()
+                .forEach(s -> monster.getSenses().add(new Sense(s)));
 
         monsterRepository.save(monster);
         LOGGER.info("[MonstersService] createMonster Monstruo creado -> {}", monster.getName());
@@ -87,8 +116,8 @@ public class MonstersService implements IMonstersService {
     }
 
     @Override
-    public BasicResponse createMonsterSenses(PostSensesRequest postSensesRequest) {
-        List<String> sensesDTO = postSensesRequest.getSenses();
+    public BasicResponse createMonsterSenses(SensesRequest sensesRequest) {
+        List<String> sensesDTO = sensesRequest.getSenses();
 
         /* Comprobación de validez de la entrada */
         if (CollectionUtils.isEmpty(sensesDTO)) {
@@ -97,7 +126,7 @@ public class MonstersService implements IMonstersService {
         }
 
         for (String senseDTO : sensesDTO) {
-            if (sensesRepository.existsById(senseDTO)) {
+            if (sensesRepository.existsByName(senseDTO)) {
                 LOGGER.error("[MonstersService] createMonsterSenses Tipo duplicado -> {}", senseDTO);
                 throw new BadRequestException("El sentido '" + senseDTO + "' ya existe");
             }
@@ -106,7 +135,7 @@ public class MonstersService implements IMonstersService {
         /* Mapeamos la entrada a una entidad de la bb dd */
         List<Sense> senses = sensesDTO
                 .stream()
-                .map(sense -> new Sense(sense, null))
+                .map(Sense::new)
                 .toList();
 
         sensesRepository.saveAll(senses);

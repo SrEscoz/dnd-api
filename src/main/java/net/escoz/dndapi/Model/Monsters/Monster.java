@@ -44,6 +44,7 @@ public class Monster {
     private Integer charisma;
 
     /* Relaciones muchos a uno */
+
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "size_id", nullable = false)
     private Size size;
@@ -53,7 +54,12 @@ public class Monster {
     private Type type;
 
     /* Relaciones muchos a muchos */
-    @ManyToMany(cascade = CascadeType.MERGE)
+
+    @ManyToMany(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
     @JoinTable(
             name = "monsters_mn_skills",
             joinColumns = @JoinColumn(name = "monster_id"),
@@ -61,7 +67,11 @@ public class Monster {
     )
     private Set<Skill> skills;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
     @JoinTable(
             name = "monsters_mn_languages",
             joinColumns = @JoinColumn(name = "monster_id"),
@@ -69,15 +79,23 @@ public class Monster {
     )
     private Set<Language> languages;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
     @JoinTable(
-            name = "monsters_mn_senses",
+            name = "monsters_nm_senses",
             joinColumns = @JoinColumn(name = "monster_id"),
             inverseJoinColumns = @JoinColumn(name = "sense_id")
     )
     private Set<Sense> senses;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
     @JoinTable(
             name = "monsters_mn_actions",
             joinColumns = @JoinColumn(name = "monster_id"),
@@ -86,7 +104,11 @@ public class Monster {
     private Set<Action> actions;
 
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
     @JoinTable(
             name = "monsters_mn_features",
             joinColumns = @JoinColumn(name = "monster_id"),
@@ -94,30 +116,15 @@ public class Monster {
     )
     private Set<Feature> features;
 
-    /* ===============================================
-        Métodos para añadir elementos a las listas
-    =============================================== */
-    public void addSkill(Skill skill) {
-        if (skills == null)
-            skills = new HashSet<>();
-        skills.add(skill);
+    /**
+     * Ñapa para evitar los nulos del ModelMapper
+     */
+    public void cleanLists() {
+        if (skills != null) skills.clear();
+        if (languages != null) languages.clear();
+        if (senses != null) senses.clear();
+        if (actions != null) actions.clear();
+        if (features != null) features.clear();
     }
 
-    public void addLanguage(Language language) {
-        if (languages == null)
-            languages = new HashSet<>();
-        languages.add(language);
-    }
-
-    public void addSense(Sense sense) {
-        if (senses == null)
-            senses = new HashSet<>();
-        senses.add(sense);
-    }
-
-    public void removeNulls() {
-        skills.remove(new Skill());
-        languages.remove(new Language());
-        senses.remove(new Sense());
-    }
 }

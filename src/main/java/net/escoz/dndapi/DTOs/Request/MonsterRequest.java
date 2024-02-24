@@ -1,8 +1,9 @@
-package net.escoz.dndapi.DTOs;
+package net.escoz.dndapi.DTOs.Request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import lombok.ToString;
+import net.escoz.dndapi.DTOs.MonsterSizeDTO;
+import net.escoz.dndapi.DTOs.MonsterTypeDTO;
 import net.escoz.dndapi.Model.Feature;
 import net.escoz.dndapi.Model.Monsters.Action;
 
@@ -10,8 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class MonsterDTO {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class MonsterRequest {
 
     /* Características generales */
     private String name;

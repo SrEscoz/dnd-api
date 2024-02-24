@@ -1,9 +1,10 @@
 package net.escoz.dndapi.Controllers;
 
-import net.escoz.dndapi.DTOs.MonsterDTO;
+import net.escoz.dndapi.DTOs.Request.MonsterRequest;
 import net.escoz.dndapi.DTOs.MonsterTypeDTO;
 import net.escoz.dndapi.DTOs.Reponses.BasicResponse;
-import net.escoz.dndapi.DTOs.Request.PostSensesRequest;
+import net.escoz.dndapi.DTOs.Reponses.MonsterDTO;
+import net.escoz.dndapi.DTOs.Request.SensesRequest;
 import net.escoz.dndapi.Services.MonstersService;
 import net.escoz.dndapi.Utils.Utils;
 import org.slf4j.Logger;
@@ -11,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/monsters")
@@ -21,9 +24,14 @@ public class MonstersController {
     @Autowired
     private MonstersService monstersService;
 
+    /* ==============================
+            Métodos de obtención
+     ============================== */
+
     @GetMapping
-    public String getMonsters() {
-        return "Monstruo";
+    public List<MonsterDTO> getMonsters() {
+        LOGGER.info("[MonstersController] getMonsters");
+        return monstersService.getMonsters();
     }
 
     /* ==============================
@@ -32,7 +40,7 @@ public class MonstersController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BasicResponse postMonster(@RequestBody MonsterDTO request) {
+    public BasicResponse postMonster(@RequestBody MonsterRequest request) {
         LOGGER.info("[MonstersController] postMonster -> {}", Utils.objectToJson(request));
         return monstersService.createMonster(request);
     }
@@ -46,7 +54,7 @@ public class MonstersController {
 
     @PostMapping("/senses")
     @ResponseStatus(HttpStatus.CREATED)
-    public BasicResponse postSenses(@RequestBody PostSensesRequest request) {
+    public BasicResponse postSenses(@RequestBody SensesRequest request) {
         LOGGER.info("[MonstersController] postSenses -> {}", Utils.objectToJson(request));
         return monstersService.createMonsterSenses(request);
     }
