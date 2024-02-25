@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.escoz.dndapi.Model.Alignment;
 import net.escoz.dndapi.Model.Feature;
 import net.escoz.dndapi.Model.Language;
 
@@ -20,10 +21,11 @@ public class Monster {
     /* Características generales */
     @Id
     private String name;
-    private String alignment; // TODO la saco como 1-*
     private Integer armorClass;
     private Integer hitPoints;
     private Double challenge;
+    private String image;
+    private String manual;
 
     @Column(length = 3000)
     private String description;
@@ -52,6 +54,10 @@ public class Monster {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "type_id", nullable = false)
     private Type type;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "alignment_id", nullable = false)
+    private Alignment alignment;
 
     /* Relaciones muchos a muchos */
 

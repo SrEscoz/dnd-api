@@ -18,6 +18,8 @@ public class MonsterRequest {
     private Integer hitPoints;
     private Double challenge;
     private String description;
+    private String image;
+    private String manual;
 
     /* Velocidades */
     private Integer speed;

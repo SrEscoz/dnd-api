@@ -6,8 +6,10 @@ import net.escoz.dndapi.DTOs.Reponses.BasicResponse;
 import net.escoz.dndapi.DTOs.Reponses.MonsterDTO;
 import net.escoz.dndapi.DTOs.Request.MonsterRequest;
 import net.escoz.dndapi.Exceptions.BadRequestException;
+import net.escoz.dndapi.Model.Alignment;
 import net.escoz.dndapi.Model.Language;
 import net.escoz.dndapi.Model.Monsters.*;
+import net.escoz.dndapi.Repositories.AlignmentsRepository;
 import net.escoz.dndapi.Repositories.MonsterRepository;
 import net.escoz.dndapi.Repositories.MonsterSizeRepository;
 import net.escoz.dndapi.Repositories.MonsterTypeRepository;
@@ -35,6 +37,9 @@ public class MonstersService implements IMonstersService {
     private MonsterTypeRepository typesRepository;
 
     @Autowired
+    private AlignmentsRepository alignmentsRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     /* ==============================
@@ -52,6 +57,7 @@ public class MonstersService implements IMonstersService {
                     MonsterDTO monsterDTO = modelMapper.map(monster, MonsterDTO.class);
                     monsterDTO.setSize(monster.getSize().getName());
                     monsterDTO.setType(monster.getType().getName());
+                    monsterDTO.setAlignment(monster.getAlignment().getName());
                     monsterDTO.setSkills(monster.getSkills().stream().map(Skill::getName).toList());
                     monsterDTO.setLanguages(monster.getLanguages().stream().map(Language::getName).toList());
                     monsterDTO.setSenses(monster.getSenses().stream().map(Sense::getName).toList());
@@ -111,12 +117,18 @@ public class MonstersService implements IMonstersService {
             throw new BadRequestException("No existe el tipo");
         }
 
+        if (!alignmentsRepository.existsById(monsterRequest.getAlignment())) {
+            LOGGER.error("[MonstersService] createMonster No existe el alineamiento -> {}", monsterRequest.getAlignment());
+            throw new BadRequestException("No existe el alineamiento");
+        }
+
         /* Mapeamos la entrada a una entidad de la bb dd */
         Monster monster = modelMapper.map(monsterRequest, Monster.class);
         monster.initLists();
 
         monster.setSize(new Size(monsterRequest.getSize()));
         monster.setType(new Type(monsterRequest.getType()));
+        monster.setAlignment(new Alignment(monsterRequest.getAlignment()));
 
         /* Solo creamos a mano las habilidades, idiomas y sentidos el resto lo mapea bien */
         monsterRequest.getSkills()

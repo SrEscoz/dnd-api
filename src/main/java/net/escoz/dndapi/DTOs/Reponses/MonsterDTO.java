@@ -35,4 +35,6 @@ public class MonsterDTO {
     private List<String> senses;
     private List<MonsterActionDTO> actions;
     private List<MonsterFeatureDTO> features;
+    private String imagen;
+    private String manual;
 }
