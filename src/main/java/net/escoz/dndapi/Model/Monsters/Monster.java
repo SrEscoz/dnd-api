@@ -109,6 +109,17 @@ public class Monster {
     )
     private Set<Action> actions;
 
+    @ManyToMany(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(
+            name = "monsters_mn_legendary_actions",
+            joinColumns = @JoinColumn(name = "monster_id"),
+            inverseJoinColumns = @JoinColumn(name = "action_id")
+    )
+    private Set<LegendaryAction> legendaryActions;
 
     @ManyToMany(
             cascade = {

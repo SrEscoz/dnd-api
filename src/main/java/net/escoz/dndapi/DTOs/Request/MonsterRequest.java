@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import net.escoz.dndapi.DTOs.MonsterActionDTO;
 import net.escoz.dndapi.DTOs.MonsterFeatureDTO;
+import net.escoz.dndapi.DTOs.MonsterLegendaryActionDTO;
 
 import java.util.List;
 
@@ -45,5 +46,6 @@ public class MonsterRequest {
     private List<String> languages;
     private List<String> senses;
     private List<MonsterActionDTO> actions;
+    private List<MonsterLegendaryActionDTO> legendaryActions;
     private List<MonsterFeatureDTO> features;
 }
