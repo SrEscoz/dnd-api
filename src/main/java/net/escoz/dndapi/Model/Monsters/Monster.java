@@ -123,8 +123,6 @@ public class Monster {
         skills = new HashSet<>();
         languages = new HashSet<>();
         senses = new HashSet<>();
-        actions = new HashSet<>();
-        features = new HashSet<>();
     }
 
 }

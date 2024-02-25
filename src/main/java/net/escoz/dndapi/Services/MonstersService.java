@@ -118,6 +118,7 @@ public class MonstersService implements IMonstersService {
         monster.setSize(new Size(monsterRequest.getSize()));
         monster.setType(new Type(monsterRequest.getType()));
 
+        /* Solo creamos a mano las habilidades, idiomas y sentidos el resto lo mapea bien */
         monsterRequest.getSkills()
                 .forEach(s -> monster.getSkills().add(new Skill(s)));
 

@@ -2,11 +2,10 @@ package net.escoz.dndapi.DTOs.Reponses;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import net.escoz.dndapi.Model.Feature;
-import net.escoz.dndapi.Model.Monsters.Action;
+import net.escoz.dndapi.DTOs.MonsterActionDTO;
+import net.escoz.dndapi.DTOs.MonsterFeatureDTO;
 
 import java.util.List;
-import java.util.Set;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -34,7 +33,6 @@ public class MonsterDTO {
     private List<String> skills;
     private List<String> languages;
     private List<String> senses;
-
-    private Set<Action> actions;
-    private Set<Feature> features;
+    private List<MonsterActionDTO> actions;
+    private List<MonsterFeatureDTO> features;
 }

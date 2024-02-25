@@ -7,8 +7,10 @@ spring:
     username:
     password:
     driver-class-name:
+  sql.init.mode: never
   jpa:
     hibernate.ddl-auto: update
+    defer-datasource-initialization: false
 
 server:
   port: 8040
