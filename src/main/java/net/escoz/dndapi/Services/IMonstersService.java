@@ -12,6 +12,10 @@ public interface IMonstersService {
 
     List<MonsterDTO> getMonsters();
 
+    List<MonsterTypeDTO> getMonsterTypes();
+
+    List<MonsterSizeDTO> getMonsterSizes();
+
     BasicResponse createMonster(MonsterRequest monsterRequest);
 
     BasicResponse createMonsterType(MonsterTypeDTO monsterTypeDTO);

@@ -9,7 +9,6 @@ import net.escoz.dndapi.Exceptions.BadRequestException;
 import net.escoz.dndapi.Model.Language;
 import net.escoz.dndapi.Model.Monsters.*;
 import net.escoz.dndapi.Repositories.MonsterRepository;
-import net.escoz.dndapi.Repositories.MonsterSensesRepository;
 import net.escoz.dndapi.Repositories.MonsterSizeRepository;
 import net.escoz.dndapi.Repositories.MonsterTypeRepository;
 import org.modelmapper.ModelMapper;
@@ -34,9 +33,6 @@ public class MonstersService implements IMonstersService {
 
     @Autowired
     private MonsterTypeRepository typesRepository;
-
-    @Autowired
-    private MonsterSensesRepository sensesRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -64,7 +60,31 @@ public class MonstersService implements IMonstersService {
                 })
                 .toList();
 
-        LOGGER.info("[MonstersService] getMonsters Obtenidos monstruos -> {}", monsters.size());
+        LOGGER.info("[MonstersService] getMonsters Obtenidos -> {}", monsters.size());
+        return response;
+    }
+
+    @Override
+    public List<MonsterTypeDTO> getMonsterTypes() {
+        List<Type> types = typesRepository.findAll();
+        List<MonsterTypeDTO> response = types
+                .stream()
+                .map(type -> modelMapper.map(type, MonsterTypeDTO.class))
+                .toList();
+
+        LOGGER.info("[MonstersService] getMonsterTypes Obtenidos -> {}", types.size());
+        return response;
+    }
+
+    @Override
+    public List<MonsterSizeDTO> getMonsterSizes() {
+        List<Size> sizes = sizeRepository.findAll();
+        List<MonsterSizeDTO> response = sizes
+                .stream()
+                .map(type -> modelMapper.map(type, MonsterSizeDTO.class))
+                .toList();
+
+        LOGGER.info("[MonstersService] getMonsterSizes Obtenidos -> {}", sizes.size());
         return response;
     }
 
