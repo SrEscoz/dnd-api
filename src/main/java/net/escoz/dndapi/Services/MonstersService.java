@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -60,6 +59,7 @@ public class MonstersService implements IMonstersService {
                     monsterDTO.setSkills(monster.getSkills().stream().map(Skill::getName).toList());
                     monsterDTO.setLanguages(monster.getLanguages().stream().map(Language::getName).toList());
                     monsterDTO.setSenses(monster.getSenses().stream().map(Sense::getName).toList());
+                    monsterDTO.setSavingThrows(monster.getSavingThrows().stream().map(SavingThrow::getName).toList());
 
                     return monsterDTO;
                 })
@@ -138,6 +138,9 @@ public class MonstersService implements IMonstersService {
 
         monsterRequest.getSenses()
                 .forEach(s -> monster.getSenses().add(new Sense(s)));
+
+        monsterRequest.getSavingThrows()
+                .forEach(s -> monster.getSavingThrows().add(new SavingThrow(s)));
 
         monsterRepository.save(monster);
         LOGGER.info("[MonstersService] createMonster Monstruo creado -> {}", monster.getName());

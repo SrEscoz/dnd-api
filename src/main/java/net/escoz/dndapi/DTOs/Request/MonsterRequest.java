@@ -45,6 +45,7 @@ public class MonsterRequest {
     private List<String> skills;
     private List<String> languages;
     private List<String> senses;
+    private List<String> savingThrows;
     private List<MonsterActionDTO> actions;
     private List<MonsterLegendaryActionDTO> legendaryActions;
     private List<MonsterFeatureDTO> features;

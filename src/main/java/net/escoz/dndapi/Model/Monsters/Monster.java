@@ -91,6 +91,18 @@ public class Monster {
                     CascadeType.MERGE
             })
     @JoinTable(
+            name = "monsters_mn_throws",
+            joinColumns = @JoinColumn(name = "monster_id"),
+            inverseJoinColumns = @JoinColumn(name = "throw_id")
+    )
+    private Set<SavingThrow> savingThrows;
+
+    @ManyToMany(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(
             name = "monsters_nm_senses",
             joinColumns = @JoinColumn(name = "monster_id"),
             inverseJoinColumns = @JoinColumn(name = "sense_id")
@@ -140,6 +152,7 @@ public class Monster {
         skills = new HashSet<>();
         languages = new HashSet<>();
         senses = new HashSet<>();
+        savingThrows = new HashSet<>();
     }
 
 }
