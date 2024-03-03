@@ -22,4 +22,6 @@ public interface IMonstersService {
 
     BasicResponse createMonsterSize(MonsterSizeDTO monsterSizeDTO);
 
+    BasicResponse updateMonsterLists(MonsterDTO monsterRequest);
+
 }

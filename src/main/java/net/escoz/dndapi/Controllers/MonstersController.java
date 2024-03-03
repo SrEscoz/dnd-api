@@ -3,6 +3,7 @@ package net.escoz.dndapi.Controllers;
 import net.escoz.dndapi.DTOs.MonsterSizeDTO;
 import net.escoz.dndapi.DTOs.MonsterTypeDTO;
 import net.escoz.dndapi.DTOs.Reponses.BasicResponse;
+import net.escoz.dndapi.DTOs.Reponses.MonsterDTO;
 import net.escoz.dndapi.DTOs.Request.MonsterRequest;
 import net.escoz.dndapi.Services.MonstersService;
 import net.escoz.dndapi.Utils.Utils;
@@ -26,6 +27,13 @@ public class MonstersController {
     public BasicResponse postMonster(@RequestBody MonsterRequest request) {
         LOGGER.info("[MonstersController] postMonster -> {}", Utils.objectToJson(request));
         return monstersService.createMonster(request);
+    }
+
+    @PutMapping("lists/{monster}")
+    public BasicResponse putMonsterLists(@PathVariable("monster") String monster, @RequestBody MonsterDTO monsterDTO) {
+        LOGGER.info("[MonstersController] putMonsterLists {} -> {}", monster, monsterDTO);
+        monsterDTO.setName(monster);
+        return monstersService.updateMonsterLists(monsterDTO);
     }
 
     @PostMapping("/types")

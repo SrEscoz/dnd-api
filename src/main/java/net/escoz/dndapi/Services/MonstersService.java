@@ -7,6 +7,7 @@ import net.escoz.dndapi.DTOs.Reponses.MonsterDTO;
 import net.escoz.dndapi.DTOs.Request.MonsterRequest;
 import net.escoz.dndapi.Exceptions.BadRequestException;
 import net.escoz.dndapi.Model.Alignment;
+import net.escoz.dndapi.Model.Feature;
 import net.escoz.dndapi.Model.Language;
 import net.escoz.dndapi.Model.Monsters.*;
 import net.escoz.dndapi.Repositories.AlignmentsRepository;
@@ -180,6 +181,47 @@ public class MonstersService implements IMonstersService {
         LOGGER.info("[MonstersService] createMonsterSize Tamaño creado -> {}", size.getName());
 
         return new BasicResponse(HttpStatus.CREATED, "Tamaño de monstruo creado");
+    }
+
+    @Override
+    public BasicResponse updateMonsterLists(MonsterDTO monsterRequest) {
+
+        Monster monster = monsterRepository.findByNameIgnoreCase(monsterRequest.getName());
+
+        /* Comprobamos que sea válido */
+        if (monster == null) {
+            LOGGER.error("[MonstersService] updateMonsterLists No existe el monstruo -> {}", monsterRequest.getName());
+            throw new BadRequestException("El monstruo no existe");
+        }
+
+        /* Añadimos sus nuevas características */
+        monsterRequest.getSkills()
+                .forEach(s -> monster.getSkills().add(new Skill(s)));
+
+        monsterRequest.getLanguages()
+                .forEach(l -> monster.getLanguages().add(new Language(l)));
+
+        monsterRequest.getSenses()
+                .forEach(s -> monster.getSenses().add(new Sense(s)));
+
+        monsterRequest.getSavingThrows()
+                .forEach(s -> monster.getSavingThrows().add(new SavingThrow(s)));
+
+        monsterRequest.getFeatures()
+                .forEach(f -> monster.getFeatures().add(new Feature(f.getName(), f.getDescription())));
+
+        monsterRequest.getActions()
+                .forEach(a -> monster.getActions().add(new Action(a.getName(), a.getDescription())));
+
+        monsterRequest.getLegendaryActions()
+                .forEach(a -> monster.getLegendaryActions().add(new LegendaryAction(a.getName(), a.getDescription())));
+
+
+        /* Actualizamos el monstruo */
+        monsterRepository.save(monster);
+        LOGGER.info("[MonstersService] updateMonsterLists Monstruo actualizado -> {}", monster.getName());
+
+        return new BasicResponse(HttpStatus.OK, "Monstruo actualizado");
     }
 
 }
