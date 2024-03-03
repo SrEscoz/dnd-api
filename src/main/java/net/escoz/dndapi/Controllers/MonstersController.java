@@ -24,32 +24,6 @@ public class MonstersController {
     @Autowired
     private MonstersService monstersService;
 
-    /* ==============================
-            Métodos de obtención
-     ============================== */
-
-    @GetMapping
-    public List<MonsterDTO> getMonsters() {
-        LOGGER.info("[MonstersController] getMonsters");
-        return monstersService.getMonsters();
-    }
-
-    @GetMapping("/types")
-    public List<MonsterTypeDTO> getTypes() {
-        LOGGER.info("[MonstersController] getTypes");
-        return monstersService.getMonsterTypes();
-    }
-
-    @GetMapping("/sizes")
-    public List<MonsterSizeDTO> getSizes() {
-        LOGGER.info("[MonstersController] getSizes");
-        return monstersService.getMonsterSizes();
-    }
-
-    /* ==============================
-            Métodos de creación
-     ============================== */
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BasicResponse postMonster(@RequestBody MonsterRequest request) {
