@@ -1,6 +1,9 @@
 package net.escoz.dndapi.Model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.*;
 import net.escoz.dndapi.Model.Monsters.Monster;
 
