@@ -52,22 +52,24 @@ public class MonstersService implements IMonstersService {
         List<Monster> monsters = monsterRepository.findAll();
         List<MonsterDTO> response = monsters
                 .stream()
-                .map(monster -> {
-                    MonsterDTO monsterDTO = modelMapper.map(monster, MonsterDTO.class);
-                    monsterDTO.setSize(monster.getSize().getName());
-                    monsterDTO.setType(monster.getType().getName());
-                    monsterDTO.setAlignment(monster.getAlignment().getName());
-                    monsterDTO.setSkills(monster.getSkills().stream().map(Skill::getName).toList());
-                    monsterDTO.setLanguages(monster.getLanguages().stream().map(Language::getName).toList());
-                    monsterDTO.setSenses(monster.getSenses().stream().map(Sense::getName).toList());
-                    monsterDTO.setSavingThrows(monster.getSavingThrows().stream().map(SavingThrow::getName).toList());
-
-                    return monsterDTO;
-                })
+                .map(this::buildMonsterDTO)
                 .toList();
 
         LOGGER.info("[MonstersService] getMonsters Obtenidos -> {}", monsters.size());
         return response;
+    }
+
+    @Override
+    public MonsterDTO getMonster(String monsterName) {
+        Monster monster = monsterRepository.findByNameIgnoreCase(monsterName);
+
+        /* Comprobamos que sea válido */
+        if (monster == null) {
+            LOGGER.error("[MonstersService] updateMonsterLists No existe el monstruo -> {}", monsterName);
+            throw new BadRequestException("El monstruo no existe");
+        }
+
+        return buildMonsterDTO(monster);
     }
 
     @Override
@@ -224,4 +226,17 @@ public class MonstersService implements IMonstersService {
         return new BasicResponse(HttpStatus.OK, "Monstruo actualizado");
     }
 
+    private MonsterDTO buildMonsterDTO(Monster monster) {
+        MonsterDTO monsterDTO = modelMapper.map(monster, MonsterDTO.class);
+
+        monsterDTO.setSize(monster.getSize().getName());
+        monsterDTO.setType(monster.getType().getName());
+        monsterDTO.setAlignment(monster.getAlignment().getName());
+        monsterDTO.setSkills(monster.getSkills().stream().map(Skill::getName).toList());
+        monsterDTO.setLanguages(monster.getLanguages().stream().map(Language::getName).toList());
+        monsterDTO.setSenses(monster.getSenses().stream().map(Sense::getName).toList());
+        monsterDTO.setSavingThrows(monster.getSavingThrows().stream().map(SavingThrow::getName).toList());
+
+        return monsterDTO;
+    }
 }

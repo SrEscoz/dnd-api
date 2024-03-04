@@ -12,6 +12,8 @@ public interface IMonstersService {
 
     List<MonsterDTO> getMonsters();
 
+    MonsterDTO getMonster(String monsterName);
+
     List<MonsterTypeDTO> getMonsterTypes();
 
     List<MonsterSizeDTO> getMonsterSizes();
